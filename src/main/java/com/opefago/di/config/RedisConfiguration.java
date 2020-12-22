@@ -13,9 +13,9 @@ import javax.validation.constraints.NotNull;
 public class RedisConfiguration {
     @JsonProperty("uri") private String uri;
     @JsonProperty("port") private String port;
-    @JsonProperty("idleConnectionTimeout") private String idleConnectionTimeout;
-    @JsonProperty("connectTimeout") private long connectTimeout;
-    @JsonProperty("timeout") private long timeout;
+    @JsonProperty("idleConnectionTimeout") private int idleConnectionTimeout;
+    @JsonProperty("connectTimeout") private int connectTimeout;
+    @JsonProperty("timeout") private int timeout;
     @JsonProperty("retryAttempts") private int retryAttempts;
-    @JsonProperty("retryInterval") private long retryInterval;
+    @JsonProperty("retryInterval") private int retryInterval;
 }
