@@ -1,0 +1,15 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 9000
+  adminConnectors:
+    - type: http
+      port: 9001
+redis:
+  uri: ${REDIS_URI:-localhost}
+  port: ${REDIS_PORT:-6379}
+  idleConnectionTimeout: 10000
+  connectTimeout: 10000
+  timeout: 3000
+  retryAttempts: 3
+  retryInterval: 1500

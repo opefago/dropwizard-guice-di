@@ -1,9 +1,19 @@
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group 'com.opefago.di'
 version '1.0'
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = 'com.opefago.di.App'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -11,18 +21,34 @@ repositories {
 
 def versions = [
         dropwizard : "1.3.14",
-        guice: "4.0",
-
+        guice: "5.2.0",
+        lombok: "1.18.16"
 ]
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    implementation 'ru.vyarus:dropwizard-guicey:5.2.0'
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    implementation "ru.vyarus:dropwizard-guicey:$versions.guice"
+    implementation "org.redisson:redisson:3.14.0"
+    compileOnly "org.projectlombok:lombok:$versions.lombok"
+    annotationProcessor "org.projectlombok:lombok:$versions.lombok"
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.16'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
-    compile "io.dropwizard:dropwizard-core:$versions.dropwizard"
+    testCompileOnly "org.projectlombok:lombok:$versions.lombok"
+    testAnnotationProcessor "org.projectlombok:lombok:$versions.lombok"
+    implementation "io.dropwizard:dropwizard-core:$versions.dropwizard"
 
+}
+
+shadowJar {
+    mergeServiceFiles()
+    exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
+    manifest {
+        attributes 'Implementation-Title': rootProject.name
+        attributes 'Implementation-Version': rootProject.version
+        attributes 'Implementation-Vendor-Id': rootProject.group
+        attributes 'Build-Time': ZonedDateTime.now(ZoneId.of("UTC"))
+                .format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+        attributes 'Built-By': InetAddress.localHost.hostName
+        attributes 'Created-By': 'Gradle ' + gradle.gradleVersion
+        attributes 'Main-Class': "com.opefago.di.App"
+    }
 }
